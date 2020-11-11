@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <cctype>
+#include <cmath>
 using namespace std;
 
 template <class T>
@@ -679,7 +680,7 @@ public:
 			soChuyenToiDaCuaTuyen = changeToInt(maLenh[1]);
 			return "1";
 		}
-		else if (maLenh[0] == "INS" &&
+		else if (maLenh[0] == "INS" && maLenh[1].length() <= 5 && maLenh[2].length() <= 10 &&
 				 (isBinary(maLenh[3]) && (isNumber(maLenh[4]) && isNumber(maLenh[5]) && maLenh[6] == "") ||
 				  (isNumber(maLenh[3]) && isNumber(maLenh[4]) && maLenh[5] == "")))
 		{
@@ -701,6 +702,8 @@ public:
 			{
 				for (int i = 0; i < soTuyenHienTai; i++)
 				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
 					if (changeToInt(soChuyenHienTaiCuaTuyen(conTroVaoDanhSachTuyen[i])) >= soChuyenToiDaCuaTuyen)
 						return "-1";
 					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
@@ -725,6 +728,8 @@ public:
 			{
 				for (int i = 0; i < soTuyenHienTai; i++)
 				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
 					if (changeToInt(soChuyenHienTaiCuaTuyen(conTroVaoDanhSachTuyen[i])) >= soChuyenToiDaCuaTuyen)
 						return "-1";
 					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
@@ -747,7 +752,7 @@ public:
 			}
 			return "-1";
 		}
-		else if ((maLenh[0] == "DEL" && maLenh[1] != "") &&
+		else if (maLenh[0] == "DEL" && maLenh[1].length() <= 5 &&
 				 (maLenh[2] == "" || (isNumber(maLenh[2]) && maLenh[3] == "") ||
 				  (isNumber(maLenh[2]) && isNumber(maLenh[3]) && maLenh[4] == "")))
 		{
@@ -758,11 +763,14 @@ public:
 			{
 				for (int i = 0; i < soTuyenHienTai; i++)
 				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
 					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
 					if ((*itr).maTuyen == maTuyen)
 					{
 						string soChuyen = soChuyenHienTaiCuaTuyen(conTroVaoDanhSachTuyen[i]);
 						conTroVaoDanhSachTuyen[i]->clear();
+						conTroVaoDanhSachTuyen[i] = NULL;
 						return soChuyen;
 					}
 				}
@@ -771,6 +779,8 @@ public:
 			{
 				for (int i = 0; i < soTuyenHienTai; i++)
 				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
 					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
 					if ((*itr).maTuyen == maTuyen)
 					{
@@ -791,6 +801,8 @@ public:
 			{
 				for (int i = 0; i < soTuyenHienTai; i++)
 				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
 					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
 					if ((*itr).maTuyen == maTuyen)
 					{
@@ -808,7 +820,7 @@ public:
 				}
 			}
 		}
-		if ((maLenh[0] == "CS" && isNumber(maLenh[2])) && (isBinary(maLenh[3]) && maLenh[4] == "" || maLenh[3] == ""))
+		else if ((maLenh[0] == "CS" && maLenh[1].length() <= 5 && isNumber(maLenh[2])) && (isBinary(maLenh[3]) && maLenh[4] == "" || maLenh[3] == ""))
 		{
 			string code = maLenh[1];
 			string time = maLenh[2];
@@ -818,6 +830,8 @@ public:
 				int soChuyenChuaDenBen = 0;
 				for (int i = 0; i < soTuyenHienTai; i++)
 				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
 					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
 					if ((*itr).maTuyen == code)
 					{
@@ -839,12 +853,16 @@ public:
 				int soChuyenChuaDenBen = 0;
 				for (int i = 0; i < soTuyenHienTai; i++)
 				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
 					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
 					if ((*itr).maTuyen == code)
 					{
 						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
 						{
-							if ((*it).chieuDi == "0" && changeToInt((*it).thoiGianXuatBen) <= changeToInt(time) && changeToInt((*it).thoiGianDenCuoi) > changeToInt(time))
+							string x = (*it).thoiGianXuatBen;
+							string y = (*it).thoiGianDenCuoi;
+							if ((*it).chieuDi == "0" && changeToInt(x) <= changeToInt(time) && changeToInt(y) > changeToInt(time))
 							{
 								soChuyenChuaDenBen++;
 							}
@@ -858,12 +876,16 @@ public:
 				int soChuyenChuaDenBen = 0;
 				for (int i = 0; i < soTuyenHienTai; i++)
 				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
 					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
 					if ((*itr).maTuyen == code)
 					{
 						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
 						{
-							if ((*it).chieuDi == "1" && changeToInt((*it).thoiGianXuatBen) <= changeToInt(time) && changeToInt((*it).thoiGianDenCuoi) > changeToInt(time))
+							string x = (*it).thoiGianXuatBen;
+							string y = (*it).thoiGianDenCuoi;
+							if ((*it).chieuDi == "1" && changeToInt(x) <= changeToInt(time) && changeToInt(y) > changeToInt(time))
 							{
 								soChuyenChuaDenBen++;
 							}
@@ -873,110 +895,165 @@ public:
 				}
 			}
 		}
-		// if(maLenh[0] == "CE") {
-		// 	string code = maLenh[1];
-		// 	string time = maLenh[2];
-		// 	string chieudi = maLenh[3];
-		// 	if(chieudi == "") {
-		// 		for (int i = 0; i < soTuyenHienTai; i++) {
-		// 			FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
-		// 			if((*itr).maTuyen == code) {
-		// 				for(FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++) {
-		// 					if((*it).thoiGianDenCuoi <= time ) {
-
-		// 					}
-		// 				}
-		// 				return "sochuyenthoaman";
-		// 			}
-		// 		}
-		// 	} else if(chieudi == "0") {
-		// 		for (int i = 0; i < soTuyenHienTai; i++) {
-		// 			FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
-		// 			if((*itr).maTuyen == code) {
-		// 				for(FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++) {
-		// 					if( (*it).chieuDi == "0" && (*it).thoiGianDenCuoi <= time) {
-
-		// 					}
-		// 				}
-		// 				return "sochuyenthoaman";
-		// 			}
-		// 		}
-		// 	} else {
-		// 		for (int i = 0; i < soTuyenHienTai; i++) {
-		// 			FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
-		// 			if((*itr).maTuyen == code) {
-		// 				for(FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++) {
-		// 					if( (*it).chieuDi == "1" && (*it).thoiGianDenCuoi <= time) {
-		// 						//++sochuyenthoaman
-		// 					}
-		// 				}
-		// 				return "sochuyenthoaman";
-		// 			}
-		// 		}
-		// 	}
-		// }
-		// if(maLenh[0] == "GS") {
-		// 	string code = maLenh[1];
-		// 	string time = maLenh[2];
-		// 	string chieudi = maLenh[3];
-		// 	if(chieudi == "") {
-		// 		for (int i = 0; i < soTuyenHienTai; i++) {
-		// 			FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
-		// 			if((*itr).maTuyen == code) {
-		// 				int minTime = (*itr).thoiGianXuatBen;
-		// 				for(FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++) {
-		// 					if(minTime > (*it).thoiGianXuatBen) {
-		// 						minTime = (*it).thoiGianXuatBen;
-		// 					}
-		// 				}
-		// 				for(FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++) {
-		// 					if((*it).thoiGianXuatBen == minTime) {
-		// 						return (*it).bienKiemSoat;
-		// 					}
-		// 				}
-		// 			}
-		// 		}
-		// 		return "-1";
-		// 	} else if(chieudi == "0") {
-		// 		for (int i = 0; i < soTuyenHienTai; i++) {
-		// 			FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
-		// 			if((*itr).maTuyen == code) {
-		// 				int minTime = (*itr).thoiGianXuatBen;
-		// 				for(FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++) {
-		// 					if( (*it).chieuDi == "0" && minTime > (*it).thoiGianXuatBen) {
-		// 						minTime = (*it).thoiGianXuatBen
-		// 					}
-		// 				}
-		// 				for(FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++) {
-		// 					if((*it).chieuDi == "0" &&(*it).thoiGianXuatBen == minTime) {
-		// 						return (*it).bienKiemSoat;
-		// 					}
-		// 				}
-
-		// 			}
-		// 		}
-		// 		return "-1";
-		// 	} else {
-		// 		for (int i = 0; i < soTuyenHienTai; i++) {
-		// 			FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
-		// 			if((*itr).maTuyen == code) {
-		// 				int minTime = (*itr).thoiGianXuatBen;
-		// 				for(FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++) {
-		// 					if( (*it).chieuDi == "1" && minTime > (*it).thoiGianXuatBen) {
-		// 						minTime = (*it).thoiGianXuatBen
-		// 					}
-		// 				}
-		// 				for(FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++) {
-		// 					if((*it).chieuDi == "1" &&(*it).thoiGianXuatBen == minTime) {
-		// 						return (*it).bienKiemSoat;
-		// 					}
-		// 				}
-
-		// 			}
-		// 		}
-		// 		return "-1";
-		// 	}
-		// }
+		else if ((maLenh[0] == "CE" && maLenh[1].length() <= 5 && isNumber(maLenh[2])) && (isBinary(maLenh[3]) && maLenh[4] == "" || maLenh[3] == ""))
+		{
+			string code = maLenh[1];
+			string time = maLenh[2];
+			string chieudi = maLenh[3];
+			if (chieudi == "")
+			{
+				int soChuyenChuaDenBen = 0;
+				for (int i = 0; i < soTuyenHienTai; i++)
+				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
+					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
+					if ((*itr).maTuyen == code)
+					{
+						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
+						{
+							string x = (*it).thoiGianXuatBen;
+							string y = (*it).thoiGianDenCuoi;
+							if (changeToInt(time) >= changeToInt(y))
+							{
+								soChuyenChuaDenBen++;
+							}
+						}
+						return NumberToString(soChuyenChuaDenBen);
+					}
+				}
+			}
+			else if (chieudi == "0")
+			{
+				int soChuyenChuaDenBen = 0;
+				for (int i = 0; i < soTuyenHienTai; i++)
+				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
+					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
+					if ((*itr).maTuyen == code)
+					{
+						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
+						{
+							string x = (*it).thoiGianXuatBen;
+							string y = (*it).thoiGianDenCuoi;
+							if ((*it).chieuDi == "0" && changeToInt(time) >= changeToInt(y))
+							{
+								soChuyenChuaDenBen++;
+							}
+						}
+						return NumberToString(soChuyenChuaDenBen);
+					}
+				}
+			}
+			else
+			{
+				int soChuyenChuaDenBen = 0;
+				for (int i = 0; i < soTuyenHienTai; i++)
+				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
+					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
+					if ((*itr).maTuyen == code)
+					{
+						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
+						{
+							string x = (*it).thoiGianXuatBen;
+							string y = (*it).thoiGianDenCuoi;
+							if ((*it).chieuDi == "1" && changeToInt(time) >= changeToInt(y))
+							{
+								soChuyenChuaDenBen++;
+							}
+						}
+						return NumberToString(soChuyenChuaDenBen);
+					}
+				}
+			}
+		}
+		else if ((maLenh[0] == "GS" && maLenh[1].length() <= 5 && isNumber(maLenh[2])) && (isBinary(maLenh[3]) && maLenh[4] == "" || maLenh[3] == ""))
+		{
+			string code = maLenh[1];
+			string time = maLenh[2];
+			string chieudi = maLenh[3];
+			if (chieudi == "")
+			{
+				int khoangCachBeNhat = 9999;
+				for (int i = 0; i < soTuyenHienTai; i++)
+				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
+					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
+					if ((*itr).maTuyen == code)
+					{
+						bool trung = false;
+						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
+						{
+							string x = (*it).thoiGianXuatBen;
+							int khoangCachThoiGian = abs(changeToInt(x) - changeToInt(time));
+							if (khoangCachThoiGian < khoangCachBeNhat)
+							{
+								khoangCachBeNhat = khoangCachThoiGian;
+							}
+						}
+						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
+						{
+							string x = (*it).thoiGianXuatBen;
+							int khoangCachThoiGian = abs(changeToInt(x) - changeToInt(time));
+							if (khoangCachThoiGian == khoangCachBeNhat)
+							{
+								return x;
+							}
+						}
+					}
+				}
+			}
+			else if (chieudi == "0")
+			{
+				int soChuyenChuaDenBen = 0;
+				for (int i = 0; i < soTuyenHienTai; i++)
+				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
+					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
+					if ((*itr).maTuyen == code)
+					{
+						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
+						{
+							string x = (*it).thoiGianXuatBen;
+							string y = (*it).thoiGianDenCuoi;
+							if ((*it).chieuDi == "0" && changeToInt(time) >= changeToInt(y))
+							{
+								soChuyenChuaDenBen++;
+							}
+						}
+						return NumberToString(soChuyenChuaDenBen);
+					}
+				}
+			}
+			else
+			{
+				int soChuyenChuaDenBen = 0;
+				for (int i = 0; i < soTuyenHienTai; i++)
+				{
+					if (conTroVaoDanhSachTuyen[i] == NULL)
+						continue;
+					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
+					if ((*itr).maTuyen == code)
+					{
+						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
+						{
+							string x = (*it).thoiGianXuatBen;
+							string y = (*it).thoiGianDenCuoi;
+							if ((*it).chieuDi == "1" && changeToInt(time) >= changeToInt(y))
+							{
+								soChuyenChuaDenBen++;
+							}
+						}
+						return NumberToString(soChuyenChuaDenBen);
+					}
+				}
+			}
+		}
 		// if(maLenh[0] == "GE") {
 		// 	string code = maLenh[1];
 		// 	string time = maLenh[2];
@@ -1046,7 +1123,10 @@ public:
 int main()
 {
 	BusSystem *bs = new BusSystem();
-	cout << bs->query("SQ 20") << endl;			  //Moi Tuyen Co 20 chuye			  //Them chuyen vao tuyen 51
-	cout << bs->query("INS 51 50D2 1 3") << endl; //Them chuyen vao tuyen 51
-	cout << bs->query("CS 51 2");
+	cout << bs->query("SQ 20") << endl;			  //Moi Tuyen Co 20 chuye
+	cout << bs->query("INS 51 50D0 1 3") << endl; //Them chuyen vao tuyen 51
+	cout << bs->query("INS 50 50D1 1 3") << endl; //Them chuyen vao tuyen 51
+	cout << bs->query("DEL 51") << endl;
+	cout << bs->query("INS 52 50D1 1 3") << endl;
+	cout << bs->query("DEL 52");
 }
