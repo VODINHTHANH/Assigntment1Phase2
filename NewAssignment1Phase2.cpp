@@ -711,7 +711,7 @@ public:
 					{
 						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
 						{
-							if (((*it).bienKiemSoat == maLenh[2] && changeToInt(maLenh[4]) <= changeToInt((*it).thoiGianDenCuoi)))
+							if (((*it).bienKiemSoat == maLenh[2] && (*it).chieuDi == maLenh[3] && changeToInt(maLenh[4]) <= changeToInt((*it).thoiGianDenCuoi)))
 							{
 								return "-1";
 							}
@@ -774,6 +774,7 @@ public:
 						return soChuyen;
 					}
 				}
+				return "0";
 			}
 			else if (timeB == "")
 			{
@@ -796,6 +797,7 @@ public:
 						return NumberToString(soChuyenBiXoa);
 					}
 				}
+				return "0";
 			}
 			else
 			{
@@ -818,6 +820,7 @@ public:
 						return NumberToString(soChuyenBiXoa);
 					}
 				}
+				return "0";
 			}
 		}
 		else if ((maLenh[0] == "CS" && maLenh[1].length() <= 5 && isNumber(maLenh[2])) && (isBinary(maLenh[3]) && maLenh[4] == "" || maLenh[3] == ""))
@@ -839,7 +842,7 @@ public:
 						{
 							string x = (*it).thoiGianXuatBen;
 							string y = (*it).thoiGianDenCuoi;
-							if ((changeToInt(x) <= changeToInt(time)) && (changeToInt(time) < changeToInt(y)))
+							if ((changeToInt(x) <= changeToInt(time)) && (changeToInt(time) <= changeToInt(y)))
 							{
 								soChuyenChuaDenBen++;
 							}
@@ -862,7 +865,7 @@ public:
 						{
 							string x = (*it).thoiGianXuatBen;
 							string y = (*it).thoiGianDenCuoi;
-							if ((*it).chieuDi == "0" && changeToInt(x) <= changeToInt(time) && changeToInt(y) > changeToInt(time))
+							if ((*it).chieuDi == "0" && changeToInt(x) <= changeToInt(time) && changeToInt(y) >= changeToInt(time))
 							{
 								soChuyenChuaDenBen++;
 							}
@@ -885,7 +888,7 @@ public:
 						{
 							string x = (*it).thoiGianXuatBen;
 							string y = (*it).thoiGianDenCuoi;
-							if ((*it).chieuDi == "1" && changeToInt(x) <= changeToInt(time) && changeToInt(y) > changeToInt(time))
+							if ((*it).chieuDi == "1" && changeToInt(x) <= changeToInt(time) && changeToInt(y) >= changeToInt(time))
 							{
 								soChuyenChuaDenBen++;
 							}
@@ -1106,7 +1109,7 @@ public:
 						{
 							string x = (*it).thoiGianDenCuoi;
 							int khoangCachThoiGian = abs(changeToInt(x) - changeToInt(time));
-							if (khoangCachThoiGian < khoangCachBeNhat && changeToInt(x) <= changeToInt(time))
+							if (khoangCachThoiGian < khoangCachBeNhat && changeToInt(x) < changeToInt(time))
 							{
 								khoangCachBeNhat = khoangCachThoiGian;
 							}
@@ -1115,7 +1118,7 @@ public:
 						{
 							string x = (*it).thoiGianDenCuoi;
 							int khoangCachThoiGian = abs(changeToInt(x) - changeToInt(time));
-							if (khoangCachThoiGian == khoangCachBeNhat && changeToInt(x) <= changeToInt(time))
+							if (khoangCachThoiGian == khoangCachBeNhat && changeToInt(x) < changeToInt(time))
 							{
 								if ((*it).chieuDi == "0")
 									return (*it).bienKiemSoat;
@@ -1127,7 +1130,7 @@ public:
 									{
 										string x = (*it1).thoiGianXuatBen;
 										int khoangCachThoiGian1 = abs(changeToInt(x) - changeToInt(time));
-										if (khoangCachThoiGian1 == khoangCachBeNhat && (*it1).chieuDi == "0" && changeToInt(x) <= changeToInt(time))
+										if (khoangCachThoiGian1 == khoangCachBeNhat && (*it1).chieuDi == "0" && changeToInt(x) < changeToInt(time))
 										{
 											return (*it1).bienKiemSoat;
 										}
@@ -1153,7 +1156,7 @@ public:
 						{
 							string x = (*it).thoiGianDenCuoi;
 							int khoangCachThoiGian = abs(changeToInt(x) - changeToInt(time));
-							if (khoangCachThoiGian < khoangCachBeNhat && (*it).chieuDi == "0" && changeToInt(x) <= changeToInt(time))
+							if (khoangCachThoiGian < khoangCachBeNhat && (*it).chieuDi == "0" && changeToInt(x) < changeToInt(time))
 							{
 								khoangCachBeNhat = khoangCachThoiGian;
 							}
@@ -1162,7 +1165,7 @@ public:
 						{
 							string x = (*it).thoiGianDenCuoi;
 							int khoangCachThoiGian = abs(changeToInt(x) - changeToInt(time));
-							if (khoangCachThoiGian == khoangCachBeNhat && (*it).chieuDi == "0" && changeToInt(x) <= changeToInt(time))
+							if (khoangCachThoiGian == khoangCachBeNhat && (*it).chieuDi == "0" && changeToInt(x) < changeToInt(time))
 							{
 								return (*it).bienKiemSoat;
 							}
@@ -1183,7 +1186,7 @@ public:
 					{
 						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
 						{
-							string x = (*it).thoiGianXuatBen;
+							string x = (*it).thoiGianDenCuoi;
 							int khoangCachThoiGian = abs(changeToInt(x) - changeToInt(time));
 							if (khoangCachThoiGian < khoangCachBeNhat && (*it).chieuDi == "1")
 							{
@@ -1192,9 +1195,9 @@ public:
 						}
 						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
 						{
-							string x = (*it).thoiGianXuatBen;
+							string x = (*it).thoiGianDenCuoi;
 							int khoangCachThoiGian = abs(changeToInt(x) - changeToInt(time));
-							if (khoangCachThoiGian == khoangCachBeNhat && (*it).chieuDi == "1")
+							if (khoangCachThoiGian == khoangCachBeNhat && (*it).chieuDi == "1" && changeToInt(x) < changeToInt(time))
 							{
 								return (*it).bienKiemSoat;
 							}
@@ -1213,8 +1216,6 @@ int main()
 {
 	BusSystem *bs = new BusSystem();
 	cout << bs->query("SQ 20") << endl; //Moi Tuyen Co 20 chuye
-	cout << bs->query("INS 51 50D3 0 2 4") << endl;
-	cout << bs->query("INS 51 50D4 0 3 5") << endl;
-	cout << bs->query("INS 51 50D5 0 5 7") << endl;
-	cout << bs->query("GE 51 8 0");
+	cout << bs->query("INS 50 51D1-12345 1 1234 5555") << endl;
+	cout << bs->query("DEL 52 4") << endl;
 }
