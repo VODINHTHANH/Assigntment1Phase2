@@ -698,7 +698,7 @@ public:
 				chuyenList->add(*temp);
 				return "1";
 			}
-			if (maLenh[3] == "0" || maLenh[3] == "1")
+			if ((maLenh[3] == "0" || maLenh[3] == "1") && isNumber(maLenh[5]))
 			{
 				for (int i = 0; i < soTuyenHienTai; i++)
 				{
@@ -711,7 +711,7 @@ public:
 					{
 						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
 						{
-							if (((*it).bienKiemSoat == maLenh[2] && (*it).chieuDi == maLenh[3] && changeToInt(maLenh[4]) <= changeToInt((*it).thoiGianDenCuoi)))
+							if (((*it).bienKiemSoat == maLenh[2] && changeToInt(maLenh[4]) <= changeToInt((*it).thoiGianDenCuoi)) || ((*it).thoiGianXuatBen == maLenh[4] && (*it).chieuDi == maLenh[3]))
 							{
 								return "-1";
 							}
@@ -737,7 +737,7 @@ public:
 					{
 						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
 						{
-							if ((*it).bienKiemSoat == maLenh[2] && changeToInt(maLenh[3]) <= changeToInt((*it).thoiGianDenCuoi))
+							if ((*it).bienKiemSoat == maLenh[2] && changeToInt(maLenh[3]) <= changeToInt((*it).thoiGianDenCuoi) || ((*it).thoiGianXuatBen == maLenh[3] && (*it).chieuDi == "0"))
 							{
 								return "-1";
 							}
@@ -850,6 +850,7 @@ public:
 						return NumberToString(soChuyenChuaDenBen);
 					}
 				}
+				return "0";
 			}
 			else if (chieudi == "0")
 			{
@@ -873,6 +874,7 @@ public:
 						return NumberToString(soChuyenChuaDenBen);
 					}
 				}
+				return "0";
 			}
 			else
 			{
@@ -896,6 +898,7 @@ public:
 						return NumberToString(soChuyenChuaDenBen);
 					}
 				}
+				return "0";
 			}
 		}
 		else if ((maLenh[0] == "CE" && maLenh[1].length() <= 5 && isNumber(maLenh[2])) && (isBinary(maLenh[3]) && maLenh[4] == "" || maLenh[3] == ""))
@@ -925,6 +928,7 @@ public:
 						return NumberToString(soChuyenChuaDenBen);
 					}
 				}
+				return "0";
 			}
 			else if (chieudi == "0")
 			{
@@ -948,6 +952,7 @@ public:
 						return NumberToString(soChuyenChuaDenBen);
 					}
 				}
+				return "0";
 			}
 			else
 			{
@@ -971,6 +976,7 @@ public:
 						return NumberToString(soChuyenChuaDenBen);
 					}
 				}
+				return "0";
 			}
 		}
 		else if ((maLenh[0] == "GS" && maLenh[1].length() <= 5 && isNumber(maLenh[2])) && (isBinary(maLenh[3]) && maLenh[4] == "" || maLenh[3] == ""))
@@ -1216,6 +1222,9 @@ int main()
 {
 	BusSystem *bs = new BusSystem();
 	cout << bs->query("SQ 20") << endl; //Moi Tuyen Co 20 chuye
-	cout << bs->query("INS 50 51D1-12345 1 1234 5555") << endl;
-	cout << bs->query("DEL 52 4") << endl;
+
+	cout << bs->query("INS 50 51D1-12345 1 555 6001") << endl;
+	cout << bs->query("INS 50 51D2-12345 0 5555 6001") << endl;
+
+	cout << bs->query("GE 50 6002") << endl;
 }
