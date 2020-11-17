@@ -760,8 +760,8 @@ public:
 				{
 					if (conTroVaoDanhSachTuyen[i] == NULL)
 						continue;
-					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
-					if ((*itr).maTuyen == maTuyen)
+					FragmentLinkedList<ChuyenXe>::Iterator itrD = conTroVaoDanhSachTuyen[i]->begin();
+					if ((*itrD).maTuyen == maTuyen)
 					{
 						string soChuyen = NumberToString(conTroVaoDanhSachTuyen[i]->size());
 						conTroVaoDanhSachTuyen[i]->~FragmentLinkedList();
@@ -777,8 +777,8 @@ public:
 				{
 					if (conTroVaoDanhSachTuyen[i] == NULL)
 						continue;
-					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
-					if ((*itr).maTuyen == maTuyen)
+					FragmentLinkedList<ChuyenXe>::Iterator itrD = conTroVaoDanhSachTuyen[i]->begin();
+					if ((*itrD).maTuyen == maTuyen)
 					{
 						int soChuyenBiXoa = 0;
 						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
@@ -800,8 +800,8 @@ public:
 				{
 					if (conTroVaoDanhSachTuyen[i] == NULL)
 						continue;
-					FragmentLinkedList<ChuyenXe>::Iterator itr = conTroVaoDanhSachTuyen[i]->begin();
-					if ((*itr).maTuyen == maTuyen)
+					FragmentLinkedList<ChuyenXe>::Iterator itrD = conTroVaoDanhSachTuyen[i]->begin();
+					if ((*itrD).maTuyen == maTuyen)
 					{
 						int soChuyenBiXoa = 0;
 						for (FragmentLinkedList<ChuyenXe>::Iterator it = conTroVaoDanhSachTuyen[i]->begin(); it != conTroVaoDanhSachTuyen[i]->end(); it++)
@@ -1259,10 +1259,9 @@ public:
 int main()
 {
 	BusSystem *bs = new BusSystem();
-	cout << bs->query("SQ 2") << endl;
-	cout << bs->query("INS 50 A 0 1 2") << endl;
-	cout << bs->query("INS 51 A 0 1 2") << endl;
-	cout << bs->query("INS 51 B 1 1 2") << endl;
+	cout << bs->query("SQ 20") << endl;
 
-	// cout << bs->query("CS 50 2134") << endl;
+	cout << bs->query("INS 50 B 1 0 10") << endl;
+	cout << bs->query("INS 50 A 1 1 10") << endl;
+	cout << bs->query("GE 50 11 1") << endl;
 }
